@@ -60,15 +60,6 @@ class Brain(object):
         # Get our reference to the C++ localization system
         self.loc = Loc()
 
-        # Retrieve our robot identification and set per-robot parameters
-        self.CoA = robots.get_certificate()
-        self.CoA.setRobotGait(self.motion)
-
-        # coa is Certificate of Authenticity (to keep things short)
-        self.out.printf(self.CoA)
-        self.out.printf("GC:  I am on team "+str(TeamConfig.TEAM_NUMBER))
-        self.out.printf("GC:  I am player  "+str(TeamConfig.PLAYER_NUMBER))
-
         # Initialize various components
         self.my = MyInfo.MyInfo()
         # Functional Variables
@@ -79,9 +70,6 @@ class Brain(object):
         self.ball = Ball.Ball(self.vision.ball)
         self.play = Play.Play()
         self.sonar = Sonar.Sonar()
-        # workaround for slarti (now trillian) sonar problems
-        if self.CoA.name == 'marvin':
-            self.sonar.MIN_DIST = 30.0
 
         # FSAs
         self.player = Switch.selectedPlayer.SoccerPlayer(self)
@@ -90,6 +78,15 @@ class Brain(object):
         self.playbook = PBInterface.PBInterface(self)
         self.gameController = GameController.GameController(self)
         self.fallController = FallController.FallController(self)
+
+        # Retrieve our robot identification and set per-robot parameters
+        self.CoA = robots.get_certificate()
+        self.player.setRobotGait()
+
+        # coa is Certificate of Authenticity (to keep things short)
+        self.out.printf(self.CoA)
+        self.out.printf("GC:  I am on team "+str(TeamConfig.TEAM_NUMBER))
+        self.out.printf("GC:  I am player  "+str(TeamConfig.PLAYER_NUMBER))
 
     def initFieldObjects(self):
         """
@@ -289,5 +286,3 @@ class Brain(object):
             self.loc.blueGoalieReset()
         else:
             self.loc.redGoalieReset()
-
-

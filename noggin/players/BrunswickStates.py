@@ -44,7 +44,7 @@ def gameReady(player):
         player.isChasing = False
         player.inKickingState = False
         player.justKicked = False
-        player.brain.CoA.setRobotGait(player.brain.motion)
+        player.setRobotGait()
 
         if player.squatting:
             player.executeMove(SweetMoves.GOALIE_SQUAT_STAND_UP)
@@ -76,7 +76,7 @@ def gameSet(player):
         player.isChasing = False
         player.inKickingState = False
         player.justKicked = False
-        player.brain.CoA.setRobotGait(player.brain.motion)
+        player.setRobotGait()
 
     if player.firstFrame() and player.lastDiffState == 'gamePenalized':
         player.brain.resetLocalization()
@@ -97,7 +97,8 @@ def gameSet(player):
 
 def gamePlaying(player):
     if player.firstFrame():
-        player.brain.CoA.setRobotGait(player.brain.motion)
+        player.gainsOn()
+        player.setRobotGait()
     if (player.firstFrame() and
         player.lastDiffState == 'gamePenalized'):
         player.brain.resetLocalization()
@@ -107,7 +108,7 @@ def gamePlaying(player):
 
 def penaltyShotsGameReady(player):
     if player.firstFrame():
-        player.brain.CoA.setRobotGait(player.brain.motion)
+        player.setRobotGait()
     if player.firstFrame():
         if player.lastDiffState == 'gamePenalized':
             player.brain.resetLocalization()
@@ -120,7 +121,7 @@ def penaltyShotsGameReady(player):
 
 def penaltyShotsGameSet(player):
     if player.firstFrame():
-        player.brain.CoA.setRobotGait(player.brain.motion)
+        player.setRobotGait()
     if player.firstFrame():
         player.stopWalking()
         player.brain.loc.resetBall()
@@ -138,7 +139,7 @@ def penaltyShotsGameSet(player):
 
 def penaltyShotsGamePlaying(player):
     if player.firstFrame():
-        player.brain.CoA.setRobotGait(player.brain.motion)
+        player.setRobotGait()
     if player.lastDiffState == 'gamePenalized' and \
             player.firstFrame():
         player.brain.resetLocalization()
@@ -182,3 +183,4 @@ def gameFinished(player):
     if not player.motion.isBodyActive() and  player.GAME_FINISHED_satDown:
         player.gainsOff()
     return player.stay()
+gameInitial = gamePlaying

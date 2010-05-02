@@ -102,7 +102,7 @@ class SoccerPlayer(SoccerFSA.SoccerFSA):
             roleState = self.getNextState()
 
             if roleState != self.currentState:
-                self.brain.CoA.setRobotGait(self.brain.motion)
+                self.setRobotGait()
                 self.switchTo(roleState)
 
         SoccerFSA.SoccerFSA.run(self)

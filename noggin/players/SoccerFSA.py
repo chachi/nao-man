@@ -144,3 +144,35 @@ class SoccerFSA(FSA.FSA):
 
     def kickScan(self):
         self.brain.tracker.performHeadMove(HeadMoves.KICK_SCAN)
+
+##### Gait switching methods
+    def setRobotGait(self):
+        """
+        Sets the robot's regular gait
+        """
+        newGait = self.brain.CoA.gait
+        self.setGait(newGait)
+
+    def setRobotDribbleGait(self):
+        """
+        Sets the robot's dribbling gait
+        """
+        newGait = self.brain.CoA.dribble_gait
+        self.setGait(newGait)
+
+    def setRobotSlowGait(self):
+        """
+        Sets robot's slow moving gait.
+        """
+        newGait = self.brain.CoA.slow_gait
+        self.setGait(newGait)
+
+    def setGait(self, newGait):
+        """
+        Sets the robots gait to the one given to it
+        """
+        CoA = self.brain.CoA
+        if newGait is not None and \
+                CoA.current_gait is not newGait:
+            CoA.current_gait = newGait
+            self.brain.motion.setGait(newGait)
